@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QStackedWidget
 )
-
+from PyQt5.QtCore import Qt
 
 def begin_search(search_term):
 
@@ -55,23 +55,28 @@ def display_ratings(self, list_id):
 
     if len(rating_results["errorMessage"]) == 0:
         if rating_results["fullTitle"]:
-            result_text = result_text + "Title: " + rating_results["fullTitle"] + '\n\n'
+            imdb_link = "<a href=\"https://www.imdb.com/title/"+list_id+"/\">"+rating_results["fullTitle"]+"</a>"
+            result_text = result_text + "Title: " + imdb_link + '<br><br>'
         if rating_results["imDb"]:
-            result_text = result_text + "imDb: " + rating_results["imDb"] + '\n'
+            imdb_link = "<a href=\"https://www.imdb.com/title/"+list_id+"/\">"+rating_results["imDb"]+"</a>"
+            result_text = result_text + "imDb: " + imdb_link + '<br>'
         if rating_results["metacritic"]:
-            result_text = result_text + "metacritic: " + rating_results["metacritic"] + '\n'
+            result_text = result_text + "metacritic: " + rating_results["metacritic"] + '<br>'
         if rating_results["rottenTomatoes"]:
-            result_text = result_text + "rottenTomatoes: " + rating_results["rottenTomatoes"] + '\n'
+            result_text = result_text + "rottenTomatoes: " + rating_results["rottenTomatoes"] + '<br>'
         if rating_results["theMovieDb"]:
-            result_text = result_text + "theMovieDb: " + rating_results["theMovieDb"] + '\n'
+            result_text = result_text + "theMovieDb: " + rating_results["theMovieDb"] + '<br>'
         if rating_results["filmAffinity"]:
-            result_text = result_text + "filmAffinity: " + rating_results["filmAffinity"] + '\n'
+            result_text = result_text + "filmAffinity: " + rating_results["filmAffinity"] + '<br>'
     else:
         result_text = result_text + rating_results["errorMessage"]
 
+    print(result_text)
     result_label = QLabel()
     result_label.setText(result_text)
     result_label.setStyleSheet('font-size:12pt')
+    result_label.setOpenExternalLinks(True)
+    result_label.setAlignment(Qt.AlignTop)
     self.results_box.addWidget(result_label)
     self.results_box.setCurrentIndex(1)
 
@@ -97,6 +102,7 @@ class SearchResults(QWidget):
                 self.results_layout.addWidget(results_btn)
                 i += 1
 
+        self.results_layout.setAlignment(Qt.AlignTop)
         self.results_buttons.setLayout(self.results_layout)
         self.results_box.addWidget(self.results_buttons)
 
